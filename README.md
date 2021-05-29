@@ -1,5 +1,5 @@
 # Scrapy
-Python Scrapy Tutorial 
+
 
 https://doc.scrapy.org/en/1.5/intro/tutorial.html#creating-a-project
 
