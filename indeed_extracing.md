@@ -1,5 +1,6 @@
 # Extracing Indeed Pages
-공부하면서 적은 초기 코드
+- 코드 정리 전의 내용
+- 공부하면서 적은 코드 설명
 
 ```
 import requests
