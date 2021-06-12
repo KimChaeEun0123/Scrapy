@@ -1,3 +1,3 @@
 # Web Scrapping
 
-Python을 이용한 웹 스크레이핑 프로젝트
+Python을 이용한 웹 크롤링과 스크레이핑
