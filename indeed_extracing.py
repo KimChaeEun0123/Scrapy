@@ -26,6 +26,5 @@ pages = []
 for link in links[:-1]:
     pages.append(int(link.string))
 
-print(pages)
 max_page = pages[-1]
 print(max_page)
