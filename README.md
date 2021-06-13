@@ -14,7 +14,7 @@ pip install requests
 pip install beautifulsoup4
 ```
 
-## Reference
+## References
 
 ### BeautifulSoup Document
 https://www.crummy.com/software/BeautifulSoup/bs4/doc.ko/
