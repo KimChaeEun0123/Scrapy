@@ -13,3 +13,8 @@ VScode에서 Python 사용
 pip install requests
 pip install beautifulsoup4
 ```
+
+## Reference
+
+### BeautifulSoup Document
+https://www.crummy.com/software/BeautifulSoup/bs4/doc.ko/
