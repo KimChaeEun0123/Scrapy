@@ -47,7 +47,7 @@ def extract_indeed_jobs(last_page):
         print(result.status_code)
         # status code: 200 (success)
 ```
-
+```
 def extract_indeed_jobs(last_page):
     jobs=[]
     #for page in range(last_page):
@@ -69,7 +69,7 @@ def extract_indeed_jobs(last_page):
         # find("a")["title"]: 속성 얻기
         print(title)
     return jobs
-
+```
 ## beautifulsoup 메서드 정리
 
 ```
