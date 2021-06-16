@@ -1,4 +1,4 @@
-# Web Scrapping
+# Web Scraping
 
 Python을 이용한 웹 크롤링과 스크래핑
 
