@@ -1,6 +1,6 @@
 # Web Scrapping
 
-Python을 이용한 웹 크롤링과 스크레이핑
+Python을 이용한 웹 크롤링과 스크래핑
 
 ##  Environment
 
