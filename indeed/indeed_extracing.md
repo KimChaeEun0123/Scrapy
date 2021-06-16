@@ -10,7 +10,6 @@ indeed_result = requests.get("https://www.indeed.com/jobs?as_and=python&limit=50
 # 검색 결과를 50개씩 보여주는 페이지
 # get()으로 source 받아온다. 
 # text로 바꿔줘야 BeautifulSoup 사용 가능. 
-# content: 바이너리 원문, json(): 딕셔너리 객체
 
 
 indeed_soup = BeautifulSoup(indeed_result, "html.parser")
