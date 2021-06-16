@@ -10,6 +10,7 @@ indeed_result = requests.get("https://www.indeed.com/jobs?as_and=python&limit=50
 # 검색 결과를 50개씩 보여주는 페이지
 # get()으로 source 받아온다. 
 # text로 바꿔줘야 BeautifulSoup 사용 가능. 
+# content: 바이너리 원문, json(): 딕셔너리 객체
 
 
 indeed_soup = BeautifulSoup(indeed_result, "html.parser")
@@ -46,7 +47,7 @@ def extract_indeed_jobs(last_page):
         print(result.status_code)
         # status code: 200 (success)
 ```
-
+```
 def extract_indeed_jobs(last_page):
     jobs=[]
     #for page in range(last_page):
@@ -68,7 +69,7 @@ def extract_indeed_jobs(last_page):
         # find("a")["title"]: 속성 얻기
         print(title)
     return jobs
-
+```
 ## beautifulsoup 메서드 정리
 
 ```
