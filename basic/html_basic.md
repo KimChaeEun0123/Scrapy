@@ -17,9 +17,10 @@
 
 ### head
 이 html 문서가 어떤 문서인지 명시 
-e.g. title, meta tag
+- charset: 문자의 인코딩 방식을 지정하는 속성
+- title: 문서 제목. 브라우저 화면 탭바에 노출되는 내용
 ### body
-문서 내용
+실제 브라우저 화면에 나타나는 내용
 
 ```html
 <html>
@@ -33,7 +34,7 @@ e.g. title, meta tag
     </body>
 </html>
 ```
-## `<input>` tag
+## input tag
 ### type
 입력 태그의 유형
 ### value
@@ -49,7 +50,8 @@ e.g. title, meta tag
 ```
 * input tag는 쌍을 이루지 않음
 
-## `<a>` tag
+## Anchor tag
+링크를 생성하는 태그
 ## href
 연결할 주소 지정
 ## target
@@ -64,3 +66,15 @@ e.g. title, meta tag
     <a href="http://google.com" title="Google">구글로 이동</a>
 </body>
 ```
+
+## Container
+의미없이 요소를 묶기 위한 태그
+
+## <div>
+block-level
+## <span>
+inline-level
+```html
+<div>
+    <span>Lorem</span> ipsum dolor sit.
+</div>
