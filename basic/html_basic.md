@@ -70,9 +70,9 @@
 ## Container
 의미없이 요소를 묶기 위한 태그
 
-## <div>
+## div
 block-level
-## <span>
+## span
 inline-level
 ```html
 <div>
