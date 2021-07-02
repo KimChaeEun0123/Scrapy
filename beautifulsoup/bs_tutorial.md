@@ -175,5 +175,144 @@ print("평균 점수: ", total_rates / len(cartoons))
 <br>
 
 ## 2. 쿠팡
+쿠팡에서 노트북을 검색하고 첫 번째 페이지의 노트북 정보를 가져온다. 
+```python
+import requests
+import re
+from bs4 import BeautifulSoup
+
+url = "https://www.coupang.com/np/search?q=%EB%85%B8%ED%8A%B8%EB%B6%81&channel=recent&component=&eventCategory=SRP&trcid=&traid=&sorter=scoreDesc&minPrice=&maxPrice=&priceRange=&filterType=&listSize=36&filter=&isPriceRange=false&brand=&offerCondition=&rating=0&page=1&rocketAll=false&searchIndexingToken=1=5&backgroundColor="
+
+res = requests.get(url)
+res.raise_for_status()
+soup = BeautifulSoup(res.text, "html.parser")
+print(res.text)
+```
+위 프로그램을 실행시켜도 아무런 동작이 일어나지 않는다. 쿠팡 사이트는 일반 사용자가 아닌 크롤러 등이 사이트에 접근하려고 할 때 접근이 차단되도록 설정되어 있다. 따라서 페이지에 접속을 할 때 user agent 값을 넘겨주어야 한다. (User agent는 접속하는 PC, 브라우저에 따라 달라진다.
+```python
+import requests
+import re
+from bs4 import BeautifulSoup
+url = "https://www.coupang.com/np/search?q=%EB%85%B8%ED%8A%B8%EB%B6%81&channel=recent&component=&eventCategory=SRP&trcid=&traid=&sorter=scoreDesc&minPrice=&maxPrice=&priceRange=&filterType=&listSize=36&filter=&isPriceRange=false&brand=&offerCondition=&rating=0&page=1&rocketAll=false&searchIndexingToken=1=5&backgroundColor="
+headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
+res = requests.get(url, headers=headers)
+res.raise_for_status()
+soup = BeautifulSoup(res.text, "html.parser")
+
+print(res.text)
+```
+제대로 실행되는 것을 볼 수 있다.
+
+<br>
+
+첫 번째로 나타나는 노트북 제품을 가져온다. 클래스 값이 "search-product"로 시작하는 li element 모두를 items에 리스트로 반환한다. items의 첫 번째 요소에서 클래스 값이 "name"인 div element 하나를 텍스트로 출력한다.
+```python
+items = soup.find_all("li", attrs={"class":re.compile("^search-product")})
+print(items[0].find("div", attrs={"class":"name"}).get_text())
+```
+1페이지 전체 제품의 이름을 출력한다.
+```python
+for item in items:
+    name = item.find("div", attrs={"class":"name"}).get_text()
+    print(name)
+```
+가격, 평점, 평점 수 정보를 이름과 함께 출력한다. 평점과 평점 수가 존재하지 않는 제품을 출력할 때 오류가 발생하지 않도록 조건문으로 처리해준다.
+```python
+for item in items:
+
+    name = item.find("div", attrs={"class":"name"}).get_text() # 제품명
+    
+    price = item.find("strong", attrs={"class":"price-value"}).get_text() # 가격
+    
+    rate = item.find("em", attrs={"class":"rating"}) # 평점
+    if rate:
+        rate = rate.get_text()
+    else:
+        rate = "평점 없음"
+    
+    rate_cnt = item.find("span", attrs={"class":"rating-total-count"}) # 평점 수 
+    if rate_cnt:
+        rate_cnt = rate_cnt.get_text()
+    else:
+        rate_cnt = "평점 수 없음"
+    
+    print(name, price, rate, rate_cnt)
+```
+평점과 평점 수가 없는 상품은 제품의 신뢰도가 떨어지므로 제외하고 가져온다. 평점 또는 평점 수가 없는 item의 경우 continue를 통해 for문을 빠져나오도록 한다. 
+```python
+for item in items:
+
+    # name, price 생략
+
+    rate = item.find("em", attrs={"class":"rating"}) # 평점
+    if rate:
+        rate = rate.get_text()
+    else:
+        print(" <평점 없는 상품 제외>")
+        continue
+    
+    rate_cnt = item.find("span", attrs={"class":"rating-total-count"}) # 평점 수 
+    if rate_cnt:
+        rate_cnt = rate_cnt.get_text() # 예: (26)
+        rate_cnt = rate_cnt[1:-1]
+        # print("리뷰수: ", rate_cnt)
+    else:
+        print(" <평점 수 없는 상품 제외>")
+        continue
+    
+    print(name, price, rate, rate_cnt)
+```
+지금까지의 결과에 소비자가 원하는 조건을 걸어주고, 조건에 부합하는 제품만 가져오려 한다. 조건은 다음과 같다.
+* 리뷰: 50개 이상
+* 평점: 4.5 이상
+조건 설정 시 자료형에 주의하도록 한다. 
+```python
+for item in items:
+
+    # name, price 생략
+    
+    # 리뷰 50개 이상, 평점 4.5 이상 되는 것만 조회
+    rate = item.find("em", attrs={"class":"rating"}) # 평점
+    if rate:
+        rate = rate.get_text()
+    else:
+        print(" <평점 없는 상품 제외>")
+        continue
+    
+    rate_cnt = item.find("span", attrs={"class":"rating-total-count"}) # 평점 수 
+    if rate_cnt:
+        rate_cnt = rate_cnt.get_text() # 예: (26)
+        rate_cnt = rate_cnt[1:-1]
+        # print("리뷰수: ", rate_cnt)
+    else:
+        print(" <평점 수 없는 상품 제외>")
+        continue
+
+    if float(rate) >= 4.5 and int(rate_cnt) >= 50:
+        print(name, price, rate, rate_cnt)
+```
+
+다음과 같은 조건을 걸어줄 수도 있다.
+* 광고 제품 제외
+* 애플 제품 제외
+광고 제품 표시는 제품 이름 앞에 나오므로 for문의 맨앞에 작성해도 무방하다.
+```python
+for item in items:
+
+    # 광고 제품 제외
+    ad_badge = item.find("span", attrs={"class":"ad-badge-text"})
+    if ad_badge:
+        print(" <광고 상품 제외> ")
+        continue
+
+    name = item.find("div", attrs={"class":"name"}).get_text() # 제품명
+    
+    # 애플 제품 제외
+    if "Apple" in name:
+        print(" <Apple 상품 제외>")
+        continue
+
+    # 아래 내용 생략
+```
 
 ## 3. 다음 이미지
