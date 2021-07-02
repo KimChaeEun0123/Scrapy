@@ -52,12 +52,12 @@
 
 ## Anchor tag
 링크를 생성하는 태그
-## href
+### href
 연결할 주소 지정
-## target
+### target
 링크를 클릭할 때 창을 어떻게 열지 설정
 - _blank, _self
-## title
+### title
 링크에 마우스 커서를 올릴 때 도움말 설명
 ```html
 <body>
@@ -70,9 +70,9 @@
 ## Container
 의미없이 요소를 묶기 위한 태그
 
-## div
+### div
 block-level
-## span
+### span
 inline-level
 ```html
 <div>
