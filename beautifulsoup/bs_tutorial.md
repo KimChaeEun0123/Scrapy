@@ -315,4 +315,72 @@ for item in items:
     # 아래 내용 생략
 ```
 
+<br>
+
+1페이지부터 5페이지까지의 제품 정보를 위 같은 조건에 따라 가져오는 프로그램을 작성한다. format()을 통해 url에서 page를 나타내는 부분을 1~5까지 반복해서 넣어주도록 한다.
+
+```python
+import requests
+import re
+from bs4 import BeautifulSoup
+
+headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
+
+for i in range(1, 6):    
+    #print("페이지: ", i) 
+    url = "https://www.coupang.com/np/search?q=%EB%85%B8%ED%8A%B8%EB%B6%81&channel=recent&component=&eventCategory=SRP&trcid=&traid=&sorter=scoreDesc&minPrice=&maxPrice=&priceRange=&filterType=&listSize=36&filter=&isPriceRange=false&brand=&offerCondition=&rating=0&page={}&rocketAll=false&searchIndexingToken=1=5&backgroundColor=".format(i)
+    res = requests.get(url, headers=headers)
+    res.raise_for_status()
+    soup = BeautifulSoup(res.text, "html.parser")
+    
+    items = soup.find_all("li", attrs={"class":re.compile("^search-product")})
+        
+    for item in items:
+
+        # 광고 제품 제외
+        ad_badge = item.find("span", attrs={"class":"ad-badge-text"})
+        if ad_badge:
+            #print(" <광고 상품 제외> ")
+            continue
+
+        name = item.find("div", attrs={"class":"name"}).get_text() # 제품명
+        
+        # 애플 제품 제외
+        if "Apple" in name:
+            #print(" <Apple 상품 제외>")
+            continue
+        
+        price = item.find("strong", attrs={"class":"price-value"}).get_text() # 가격
+        
+        # 리뷰 50개 이상, 평점 4.5 이상 되는 것만 조회
+        rate = item.find("em", attrs={"class":"rating"}) # 평점
+        if rate:
+            rate = rate.get_text()
+        else:
+            #print(" <평점 없는 상품 제외>")
+            continue
+        
+        rate_cnt = item.find("span", attrs={"class":"rating-total-count"}) # 평점 수 
+        if rate_cnt:
+            rate_cnt = rate_cnt.get_text()[1:-1]
+        else:
+            #print(" <평점 수 없는 상품 제외>")
+            continue
+        
+        if float(rate) >= 4.5 and int(rate_cnt) >= 100:
+            print(name, price, rate, rate_cnt)
+```
+제품 링크를 추가하면 마음에 드는 제품의 링크로 바로 이동할 수 있다. 
+```python   
+        link = item.find("a", attrs={"class":"search-product-link"})["href"]
+        
+        if float(rate) >= 4.5 and int(rate_cnt) >= 100:
+            #print(name, price, rate, rate_cnt)
+            print(f"제품명 : {name}")
+            print(f"가격 : {price}")
+            print(f"평점 : {rate}점 ({rate_cnt}개)")
+            print("바로가기 : {}".format("https://www.coupang.com"+link))
+            print("-"*100) # 구분
+```
+
 ## 3. 다음 이미지
