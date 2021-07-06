@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 url = "https://finance.naver.com/sise/sise_market_sum.nhn?sosok=0&page="
 
 
-filename = "시가총액-200.csv"
+filename = "./csv/시가총액-200.csv"
 f = open(filename, "w", encoding="utf-8-sig", newline="")
 # 엑셀파일에서 한글 깨짐 있으면 utf -> utf-8-sig
 # newline: 줄바꿈 개행문자 없게
