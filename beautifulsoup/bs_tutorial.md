@@ -382,5 +382,3 @@ for i in range(1, 6):
             print("바로가기 : {}".format("https://www.coupang.com"+link))
             print("-"*100) # 구분
 ```
-
-## 3. 다음 이미지
